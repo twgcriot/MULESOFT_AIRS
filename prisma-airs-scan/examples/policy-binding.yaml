@@ -1,0 +1,45 @@
+# Bind the compiled Prisma AIRS policy to an API instance on Flex Gateway in local mode.
+#
+# Build first, from prisma-airs-scan/:
+#   make build
+#   make show-policy-ref-name
+#
+# Copy the generated files into the gateway configuration directory:
+#   target/wasm32-wasip1/release/prisma_airs_scan_definition.yaml
+#   target/wasm32-wasip1/release/prisma_airs_scan_implementation.yaml
+# Then copy this binding to <flex-gateway-conf.d>/custom/ and set targetRef.name
+# and policyRef.name. Do not attach this policy to the Prisma AIRS API instance
+# itself; the policy calls that API.
+#
+# The gateway substitutes $PRISMA_AIRS_API_KEY the same way as
+# prisma-airs-runtime-api.yaml. Export it before the gateway starts:
+#   set -a && source ~/.cursor/.env && set +a
+apiVersion: gateway.mulesoft.com/v1alpha1
+kind: PolicyBinding
+metadata:
+  name: prisma-airs-scan
+spec:
+  targetRef:
+    kind: ApiInstance
+    name: ingress-http
+  policyRef:
+    kind: Extension
+    name: prisma-airs-scan-impl
+    namespace: default
+  order: 1
+  config:
+    airsService: https://service.api.aisecurity.paloaltonetworks.com
+    apiKey: $PRISMA_AIRS_API_KEY
+    profileName: your-ai-security-profile
+    scanPath: /v1/scan/sync/request
+    scanRequests: true
+    scanResponses: true
+    scanLlm: true
+    scanRest: true
+    scanMcp: true
+    failClosed: true
+    blockUnscannable: false
+    blockStatusCode: 403
+    timeoutMs: 10000
+    userHeader: x-forwarded-user
+    appName: flex-gateway

@@ -1,0 +1,33 @@
+---
+apiVersion: gateway.mulesoft.com/v1alpha1
+kind: ApiInstance
+metadata:
+  name: ingress-http
+spec:
+  address: http://0.0.0.0:8081
+  services:
+    upstream:
+      address: http://backend
+      routes:
+        - config:
+            destinationPath: /anything/echo/
+  policies:
+    - policyRef:
+        name: prisma-airs-scan-impl
+        namespace: default
+      config:
+        airsService: https://service.api.aisecurity.paloaltonetworks.com
+        apiKey: $PRISMA_AIRS_API_KEY
+        profileName: your-ai-security-profile
+        scanPath: /v1/scan/sync/request
+        scanRequests: true
+        scanResponses: true
+        scanLlm: true
+        scanRest: true
+        scanMcp: true
+        failClosed: true
+        blockUnscannable: false
+        blockStatusCode: 403
+        timeoutMs: 10000
+        userHeader: x-forwarded-user
+        appName: flex-gateway

@@ -1,0 +1,54 @@
+# Anypoint Flex Gateway registration for the Prisma AIRS AI Runtime API (US).
+#
+# Upstream: https://service.api.aisecurity.paloaltonetworks.com
+# Auth:     x-pan-token from the PRISMA_AIRS_API_KEY environment variable
+#           (set in ~/.cursor/.env). Flex Gateway substitutes $PRISMA_AIRS_API_KEY
+#           at startup. Do not put the key value in this file.
+#
+# Apply on a Flex Gateway in local mode. Export the key, then copy this file
+# into the gateway conf.d directory (the gateway reloads it automatically):
+#   set -a && source ~/.cursor/.env && set +a
+#   cp prisma-airs-runtime-api.yaml <flex-gateway-conf.d>/prisma-airs-runtime-api.yaml
+#
+apiVersion: gateway.mulesoft.com/v1alpha1
+kind: ApiInstance
+metadata:
+  name: prisma-airs-runtime-api
+spec:
+  address: http://0.0.0.0:8081
+  services:
+    prisma-airs-us:
+      address: https://service.api.aisecurity.paloaltonetworks.com:443
+---
+# Drop any caller-supplied token so the upstream always receives the env key.
+apiVersion: gateway.mulesoft.com/v1alpha1
+kind: PolicyBinding
+metadata:
+  name: prisma-airs-strip-client-token
+spec:
+  targetRef:
+    name: prisma-airs-runtime-api
+  policyRef:
+    name: header-removal-flex
+    namespace: default
+  order: 1
+  config:
+    inboundHeaders:
+      - x-pan-token
+---
+# Prisma AIRS API-key auth. The value is read from PRISMA_AIRS_API_KEY.
+apiVersion: gateway.mulesoft.com/v1alpha1
+kind: PolicyBinding
+metadata:
+  name: prisma-airs-inject-api-key
+spec:
+  targetRef:
+    name: prisma-airs-runtime-api
+  policyRef:
+    name: header-injection-flex
+    namespace: default
+  order: 2
+  config:
+    inboundHeaders:
+      - key: x-pan-token
+        value: $PRISMA_AIRS_API_KEY

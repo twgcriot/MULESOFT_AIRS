@@ -1,0 +1,94 @@
+---
+apiVersion: gateway.mulesoft.com/v1alpha1
+kind: Extension
+metadata:
+  labels:
+    title: Prisma AIRS Scan
+    description: Scans LLM, REST, and MCP request and response payloads with the Prisma AIRS Runtime API and allows or blocks on the scan verdict.
+    category: Security
+    metadata/interfaceScope: api,resource
+spec:
+  extends:
+    - name: extension-definition
+      namespace: default
+  properties:
+    airsService:
+      type: string
+      format: service
+      description: "Prisma AIRS Runtime API origin. The policy calls this service directly."
+      default: "https://service.api.aisecurity.paloaltonetworks.com"
+    apiKey:
+      type: string
+      description: "Prisma AIRS API key, sent as x-pan-token. Use $PRISMA_AIRS_API_KEY in local mode when the gateway substitutes environment variables."
+      "@context":
+        "@characteristics":
+          - security:sensitive
+    profileName:
+      type: string
+      description: "AI security profile name. Leave empty only when profileId is set."
+      default: ""
+    profileId:
+      type: string
+      description: "AI security profile ID. Used with or instead of profileName."
+    scanPath:
+      type: string
+      description: "Synchronous scan path on the Prisma AIRS service."
+      default: "/v1/scan/sync/request"
+    scanRequests:
+      type: boolean
+      description: "Scan inbound request payloads before they reach the upstream API."
+      default: true
+    scanResponses:
+      type: boolean
+      description: "Scan upstream response payloads before they reach the caller."
+      default: true
+    scanLlm:
+      type: boolean
+      description: "Scan OpenAI and Anthropic chat payloads. Recognized payloads use native schema scanning."
+      default: true
+    scanRest:
+      type: boolean
+      description: "Scan other textual REST request and response bodies."
+      default: true
+    scanMcp:
+      type: boolean
+      description: "Scan Model Context Protocol JSON-RPC and /mcp traffic."
+      default: true
+    failClosed:
+      type: boolean
+      description: "Block the exchange when the Prisma AIRS scan call fails or returns no verdict."
+      default: true
+    blockUnscannable:
+      type: boolean
+      description: "Block binary payloads. When false, binary payloads are allowed and marked skipped."
+      default: false
+    blockStatusCode:
+      type: integer
+      description: "HTTP status returned when Prisma AIRS action is block."
+      default: 403
+    timeoutMs:
+      type: integer
+      description: "Timeout for the synchronous scan call, in milliseconds."
+      default: 10000
+    userHeader:
+      type: string
+      description: "Request header copied into Prisma AIRS metadata app_user."
+      default: "x-forwarded-user"
+    appName:
+      type: string
+      description: "Application name copied into Prisma AIRS metadata app_name."
+  required:
+    - airsService
+    - apiKey
+    - profileName
+    - scanPath
+    - scanRequests
+    - scanResponses
+    - scanLlm
+    - scanRest
+    - scanMcp
+    - failClosed
+    - blockUnscannable
+    - blockStatusCode
+    - timeoutMs
+    - userHeader

@@ -1,0 +1,9 @@
+[package]
+name = "prisma-airs-scan-core"
+version = "1.0.0"
+edition = "2021"
+description = "Payload classification and Prisma AIRS scan verdicts for the Flex Gateway policy"
+license = "Apache-2.0"
+
+[dependencies]
+serde_json = "1.0"
