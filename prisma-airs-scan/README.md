@@ -24,11 +24,19 @@ make show-policy-ref-name
 
 `make build` writes these files under `target/wasm32-wasip1/release/`:
 
+- `prisma_airs_scan_definition.json`
 - `prisma_airs_scan_definition.yaml`
 - `prisma_airs_scan_implementation.yaml`
 - `prisma_airs_scan.wasm`
 
-Copy the definition and implementation YAML into the gateway `conf.d` directory. Copy `examples/policy-binding.yaml` to `conf.d/custom/`, set `targetRef.name` to the API instance, and set `policyRef.name` to the value printed by `make show-policy-ref-name`.
+Publish the definition to Exchange with these two files, not the GCL file:
+
+- `exchange/prisma-airs-scan.json`
+- `exchange/prisma-airs-scan.yaml`
+
+The YAML file starts with `#%Policy Definition 0.1` and includes `category` and `providedCharacteristics`. After that asset is stable, add the implementation with `target/wasm32-wasip1/release/prisma_airs_scan.wasm` and `exchange/prisma-airs-scan-implementation.yaml`.
+
+`prisma_airs_scan_definition.json` is the same schema. Copy the definition and implementation YAML into the gateway `conf.d` directory for local mode. Copy `examples/policy-binding.yaml` to `conf.d/custom/`, set `targetRef.name` to the API instance, and set `policyRef.name` to the value printed by `make show-policy-ref-name`.
 
 Do not apply the policy to the API instance that proxies the Prisma AIRS Runtime API. The policy calls that API itself.
 

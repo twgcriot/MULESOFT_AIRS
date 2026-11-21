@@ -1,0 +1,128 @@
+{
+  "title": "Prisma AIRS Scan",
+  "type": "object",
+  "description": "Scans LLM, REST, and MCP request and response payloads with the Prisma AIRS Runtime API and allows or blocks on the scan verdict.",
+  "properties": {
+    "airsService": {
+      "title": "Prisma AIRS Service",
+      "type": "string",
+      "default": "https://service.api.aisecurity.paloaltonetworks.com",
+      "description": "Prisma AIRS Runtime API origin. The policy calls this service directly."
+    },
+    "apiKey": {
+      "title": "API Key",
+      "type": "string",
+      "description": "Prisma AIRS API key, sent as x-pan-token. Use $PRISMA_AIRS_API_KEY in local mode when the gateway substitutes environment variables.",
+      "@context": {
+        "@characteristics": [
+          "security:sensitive"
+        ]
+      }
+    },
+    "profileName": {
+      "title": "Profile Name",
+      "type": "string",
+      "default": "",
+      "description": "AI security profile name. Leave empty only when profileId is set."
+    },
+    "profileId": {
+      "title": "Profile ID",
+      "type": "string",
+      "description": "AI security profile ID. Used with or instead of profileName."
+    },
+    "scanPath": {
+      "title": "Scan Path",
+      "type": "string",
+      "default": "/v1/scan/sync/request",
+      "description": "Synchronous scan path on the Prisma AIRS service."
+    },
+    "scanRequests": {
+      "title": "Scan Requests",
+      "type": "boolean",
+      "default": true,
+      "description": "Scan inbound request payloads before they reach the upstream API."
+    },
+    "scanResponses": {
+      "title": "Scan Responses",
+      "type": "boolean",
+      "default": true,
+      "description": "Scan upstream response payloads before they reach the caller."
+    },
+    "scanLlm": {
+      "title": "Scan LLM Traffic",
+      "type": "boolean",
+      "default": true,
+      "description": "Scan OpenAI and Anthropic chat payloads. Recognized payloads use native schema scanning."
+    },
+    "scanRest": {
+      "title": "Scan REST Traffic",
+      "type": "boolean",
+      "default": true,
+      "description": "Scan other textual REST request and response bodies."
+    },
+    "scanMcp": {
+      "title": "Scan MCP Traffic",
+      "type": "boolean",
+      "default": true,
+      "description": "Scan Model Context Protocol JSON-RPC and /mcp traffic."
+    },
+    "failClosed": {
+      "title": "Fail Closed",
+      "type": "boolean",
+      "default": true,
+      "description": "Block the exchange when the Prisma AIRS scan call fails or returns no verdict."
+    },
+    "blockUnscannable": {
+      "title": "Block Unscannable Payloads",
+      "type": "boolean",
+      "default": false,
+      "description": "Block binary payloads. When false, binary payloads are allowed and marked skipped."
+    },
+    "blockStatusCode": {
+      "title": "Block Status Code",
+      "type": "integer",
+      "default": 403,
+      "description": "HTTP status returned when Prisma AIRS action is block."
+    },
+    "timeoutMs": {
+      "title": "Timeout (ms)",
+      "type": "integer",
+      "default": 10000,
+      "description": "Timeout for the synchronous scan call, in milliseconds."
+    },
+    "userHeader": {
+      "title": "User Header",
+      "type": "string",
+      "default": "x-forwarded-user",
+      "description": "Request header copied into Prisma AIRS metadata app_user."
+    },
+    "appName": {
+      "title": "Application Name",
+      "type": "string",
+      "description": "Application name copied into Prisma AIRS metadata app_name."
+    }
+  },
+  "required": [
+    "airsService",
+    "apiKey",
+    "profileName",
+    "scanPath",
+    "scanRequests",
+    "scanResponses",
+    "scanLlm",
+    "scanRest",
+    "scanMcp",
+    "failClosed",
+    "blockUnscannable",
+    "blockStatusCode",
+    "timeoutMs",
+    "userHeader"
+  ],
+  "unevaluatedProperties": false,
+  "@context": {
+    "@vocab": "anypoint://vocabulary/policy.yaml#",
+    "security": "anypoint://vocabulary/policy.yaml#"
+  },
+  "$id": "prisma-airs-scan",
+  "$schema": "https://json-schema.org/draft/2019-09/schema"
+}

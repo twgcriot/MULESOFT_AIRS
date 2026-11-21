@@ -1,0 +1,11 @@
+#%Policy Definition 0.1
+name: Prisma AIRS Scan
+description: Scans LLM, REST, and MCP request and response payloads with the Prisma AIRS Runtime API and allows or blocks on the scan verdict.
+category: Security
+providedCharacteristics:
+  - AI payload inspection
+requiredCharacteristics: []
+interfaceScope: ["api", "resource"]
+interfaceTransformation: []
+encryptionSupported: false
+violationCategory: security

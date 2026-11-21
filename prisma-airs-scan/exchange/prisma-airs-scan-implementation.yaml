@@ -1,0 +1,5 @@
+#%Policy Implementation 1.0
+minRuntimeVersion: 1.12.0
+technology: flexGateway
+name: Prisma AIRS Scan Flex Implementation
+releaseNotes: Scans LLM, REST, and MCP payloads with the Prisma AIRS Runtime API.

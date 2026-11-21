@@ -34,6 +34,9 @@ playground/config/registration.yaml tests/config/registration.yaml: ## Generate 
 build: build-asset-files ## Build the policy definition and implementation
 	@cargo build --target $(TARGET) --release
 	@cp "$(DEFINITION_GCL_PATH)" "$(TARGET_DIR)/$(CRATE_NAME)_definition.yaml"
+	@cp exchange/prisma-airs-scan.json "$(TARGET_DIR)/$(CRATE_NAME)_definition.json"
+	@cp exchange/prisma-airs-scan.json definition/schema.json
+	@cp exchange/prisma-airs-scan.yaml "$(TARGET_DIR)/$(CRATE_NAME)_exchange_definition.yaml"
 	@cargo anypoint gcl-gen -d $(DEFINITION_NAME) -n $(DEFINITION_NAMESPACE) -w $(TARGET_DIR)/$(CRATE_NAME).wasm -o $(TARGET_DIR)/$(CRATE_NAME)_implementation.yaml
 	@echo $(POLICY_REF_NAME) > target/policy-ref-name.txt
 

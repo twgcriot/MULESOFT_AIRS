@@ -13,7 +13,7 @@ spec:
             destinationPath: /anything/echo/
   policies:
     - policyRef:
-        name: prisma-airs-scan-impl
+        name: prisma-airs-scan-v1-0-impl
         namespace: default
       config:
         airsService: https://service.api.aisecurity.paloaltonetworks.com

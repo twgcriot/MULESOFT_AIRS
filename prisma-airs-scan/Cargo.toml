@@ -8,7 +8,7 @@ description = "Flex Gateway policy that enforces Prisma AIRS runtime scanning"
 license = "Apache-2.0"
 
 [package.metadata.anypoint]
-group_id = "00000000-0000-0000-0000-000000000000"
+group_id = "3e409f0e-4549-4d38-b0e6-2fafb3a313d2"
 definition_asset_id = "prisma-airs-scan"
 implementation_asset_id = "prisma-airs-scan-flex"
 

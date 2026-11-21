@@ -5,6 +5,7 @@
 #   make show-policy-ref-name
 #
 # Copy the generated files into the gateway configuration directory:
+#   target/wasm32-wasip1/release/prisma_airs_scan_definition.json
 #   target/wasm32-wasip1/release/prisma_airs_scan_definition.yaml
 #   target/wasm32-wasip1/release/prisma_airs_scan_implementation.yaml
 # Then copy this binding to <flex-gateway-conf.d>/custom/ and set targetRef.name
@@ -24,13 +25,13 @@ spec:
     name: ingress-http
   policyRef:
     kind: Extension
-    name: prisma-airs-scan-impl
+    name: prisma-airs-scan-v1-0-impl
     namespace: default
   order: 1
   config:
     airsService: https://service.api.aisecurity.paloaltonetworks.com
     apiKey: $PRISMA_AIRS_API_KEY
-    profileName: your-ai-security-profile
+    profileName: GrokAIRS-Profile
     scanPath: /v1/scan/sync/request
     scanRequests: true
     scanResponses: true

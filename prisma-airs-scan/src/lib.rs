@@ -11,6 +11,7 @@ use prisma_airs_scan_core::{
 
 use crate::generated::config::Config;
 
+#[cfg(test)]
 const AIRS_HOST: &str = "service.api.aisecurity.paloaltonetworks.com";
 
 #[entrypoint]
